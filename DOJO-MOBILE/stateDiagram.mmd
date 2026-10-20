@@ -1,0 +1,52 @@
+
+stateDiagram-v2
+    direction TB
+
+    [*] --> AFaire
+
+    state "À faire" as AFaire
+    state "En cours" as EnCours
+    state "En pause" as EnPause
+    state "À valider" as AValider
+    state "Prêt pour Live Coding" as PretLiveCoding
+    state "En live coding" as EnLiveCoding
+    state "À valider live coding" as AValiderLiveCoding
+    state "En retard" as EnRetard
+    state "Absent" as Absent
+    state "Validé" as Valide
+    state "No Validé" as Nvalide
+    state "En evaluation" as Ev
+    state "Revision neccessaire" as Rn
+
+    AFaire --> EnCours
+
+    EnCours --> EnPause
+    EnCours --> AValider
+    EnCours --> Absent
+    EnCours --> EnRetard
+
+    AValider --> PretLiveCoding
+    AValider --> Ev
+    AValider --> Valide
+    Ev --> Rn
+    Ev --> Valide
+    state if_state <<choice>>
+    Rn --> if_state
+    if_state --> EnCours: if n < 3
+    if_state --> Nvalide : if n >= 3
+
+    PretLiveCoding --> EnLiveCoding
+
+
+    EnLiveCoding --> AValiderLiveCoding
+
+
+    AValiderLiveCoding --> Ev
+
+    EnPause --> EnCours
+
+    EnRetard --> Nvalide
+    Absent --> AFaire
+
+    Valide --> [*]
+    Nvalide --> [*]
